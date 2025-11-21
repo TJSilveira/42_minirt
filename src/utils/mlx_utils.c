@@ -27,7 +27,7 @@ void	update_pixel(t_engine *e)
 			r.dir = &ray_direction;
 			r.orig = &e->cam.camera_center;
 			r.tmin = 0.0;
-			r.tmax = 100.0;
+			r.tmax = TMAX;
 
             p.clr = ray_color(&r, e);
 			my_mlx_pixel_put(&e->img, p.x, p.y, p.clr);
@@ -64,15 +64,13 @@ void	init_engine(char *argv[], t_engine *e)
 	init_img(e);
 	init_camera(e);
 	create_scene(argv, e);
-	printf("After creating scene\n");
-	printf("Sphere 0:");
-	print_vec3(&e->scene.objects[0]->sphere.center);
-	printf(" %f ", e->scene.objects[0]->sphere.ray);
-	print_vec3(&e->scene.objects[0]->sphere.color);
-	printf("\n");
-	printf("Sphere 1:");
-	print_vec3(&e->scene.objects[1]->sphere.center);
-	printf(" %f ", e->scene.objects[1]->sphere.ray);
-	print_vec3(&e->scene.objects[1]->sphere.color);
+	for (size_t i = 0; e->scene.objects[i]; i++)
+	{
+		printf("Object %li\n", i);
+		print_vec3(&e->scene.objects[i]->sphere.center);
+		printf("%f\n", e->scene.objects[i]->sphere.ray);
+		print_vec3(&e->scene.objects[i]->sphere.color);
+	}
+	
 	update_pixel(e);
 }

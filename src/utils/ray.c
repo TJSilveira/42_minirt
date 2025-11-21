@@ -23,21 +23,33 @@ unsigned int t_color3_to_uint(t_color3 c)
 
 unsigned int ray_color(ray *r, t_engine *e)
 {
-	t_vec3		n;
-	t_hit		hit;
+	t_vec3	n;
+	t_hit	hit;
+	int		i;
+	t_bool	hit_anything;
+	float	closest_so_far;
 
-	if (hit_sphere(&e->scene.objects[0]->sphere, r, &hit) == TRUE)
+	i = -1;
+	hit_anything = FALSE;
+	closest_so_far = r->tmax;
+	t_color3 black = {{1.0,1.0,1.0}};
+	while (e->scene.objects[++i])
 	{
-		n = vec3_sub_2inst_copy(point_at_ray(r, hit.t), e->scene.objects[0]->sphere.center);
-		n = unit_vec3(&n);
-		vec3_add_cont(&n, 1);
+		if (hit_sphere(&e->scene.objects[i]->sphere, r, &hit, closest_so_far) == TRUE)
+		{
+			closest_so_far = hit.t;
+			hit_anything = TRUE;
+		}
+	}
+	if (hit_anything == TRUE)
+	{
+		n = vec3_add_2inst_copy(hit.normal, black);
 		vec3_mul_const(&n, 0.5);
 		return (t_color3_to_uint(n));
 	}
-
+	
 	t_vec3 unit_direction = unit_vec3(r->dir);
 	float a = 0.5 * (unit_direction.e[1] + 1.0);
-	t_color3 black = {{1.0,1.0,1.0}};
 	t_color3 blue = {{0.5,0.7,1.0}};
 	black = vec3_mul_const_copy(black, 1.0 - a); 
 	blue = vec3_mul_const_copy(blue, a); 
@@ -54,13 +66,13 @@ void set_face_normal(ray *r, t_hit *rec)
 	rec->inside_face = FALSE;
 }
 
-t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec)
+t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec, float tmax)
 {
 	t_vec3	oc;
 	t_quadratic quad;
 	float	root;
 
-	oc = vec3_sub_2inst_copy(*r->orig, s->center);
+	oc = vec3_sub_2inst_copy(s->center, *r->orig);
 	quad.a = vec3_dot(r->dir, r->dir);
 	quad.h = vec3_dot(&oc, r->dir);
 	quad.c = vec3_dot(&oc, &oc) - (s->ray * s->ray);
@@ -68,10 +80,10 @@ t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec)
 	if(quad.has_solutions == FALSE)
 		return (FALSE);
 	root = quad.t_minus;
-	if (root <= r->tmin || root >= r->tmax)
+	if (root <= r->tmin || root >= tmax)
 	{
 		root = quad.t_plus;
-		if (root <= r->tmin || root >= r->tmax)
+		if (root <= r->tmin || root >= tmax)
 			return (FALSE);
 	}
 	rec->t = root;

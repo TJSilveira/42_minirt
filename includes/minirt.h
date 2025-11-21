@@ -25,6 +25,7 @@
 # define IMAGE_WIDTH 1200
 # define PI 3.14159265
 # define MAX_INT_COLOR 255
+# define TMAX 5000
 # define NUM_PARAM_SPHERE 3
 
 
@@ -95,6 +96,7 @@ typedef enum e_object_id
 
 typedef union u_object
 {
+	t_object_id	id;
 	t_sphere	sphere;
 } t_object;
 
@@ -172,7 +174,7 @@ t_point3 calculate_pixel_center(t_camera *c, int row, int col);
 // ray.c
 unsigned int ray_color(ray *r, t_engine *e);
 t_point3 point_at_ray(ray *r, float t);
-t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec);
+t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec, float tmax);
 
 // mlx_utils.c
 void	my_mlx_pixel_put(t_image *data, int x, int y, int color);

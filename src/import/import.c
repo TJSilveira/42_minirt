@@ -29,9 +29,9 @@ int rt_import_sphere(char **params, t_scene *s)
 		rt_import_color(params[2], &sp->sphere.color) == EXIT_FAILURE)
 	{
 		free(sp);
-		printf("Problem in the import of the sphere\n");
 		return (EXIT_FAILURE);		
 	}
+	sp->id = id_sphere;
 	add_object_to_scene(s, sp);
 	return(EXIT_SUCCESS);
 }
@@ -44,13 +44,6 @@ int rt_import_color(char *param, t_vec3 *vec)
 	if (ft_strchr(param, '.') != NULL)
 		return (EXIT_FAILURE);
 	nums = ft_split(param, ',');
-	
-	for (size_t i = 0; nums[i]; i++)
-	{
-		printf("This is inside import_color: %s\n", nums[i]);
-	}
-	
-	
 	if (!(nums && nums[0] && nums[1] && nums [2] && !nums[3]))
 		return(return_and_free_array(EXIT_FAILURE, nums));
 	i = -1;
@@ -68,7 +61,6 @@ int rt_import_color(char *param, t_vec3 *vec)
 
 int	rt_import_float(char *param, float *result)
 {
-	printf("In rt_import_float %s\n", param);
 	if (is_float(param) == FALSE)
 		return (EXIT_FAILURE);
 	ft_str_to_float(param, result);
@@ -91,10 +83,7 @@ int rt_import_vec3 (char *param, t_vec3 *vec)
 	}	
 	i = -1;
 	while (nums[++i])
-	{
 		ft_str_to_float(nums[i], &vec->e[i]);
-		printf("Inside the import_vec3 function: [%i] %f\n", i, vec->e[i]);
-	}
 	return(return_and_free_array(EXIT_SUCCESS, nums));
 }
 
