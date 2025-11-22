@@ -22,10 +22,14 @@
 # define G 1
 # define B 2
 # define MAX_OBJECTS 100
-# define IMAGE_WIDTH 1200
-# define PI 3.14159265
+# define IMAGE_WIDTH 1800
 # define MAX_INT_COLOR 255
 # define TMAX 5000
+# define RAY_SAMPLE_SIDE_SIZE 2.0
+# define RAY_SAMPLE_PADDING 0.2
+
+# define PI 3.14159265
+
 # define NUM_PARAM_SPHERE 3
 
 
@@ -46,13 +50,19 @@ typedef struct s_hit
 	t_bool		inside_face;
 }t_hit;
 
-typedef struct ray
+typedef struct s_interval
 {
-	t_vec3 		*dir;
+	float	min;
+	float	max;
+} t_interval;
+
+
+typedef struct s_ray
+{
+	t_vec3 		dir;
 	t_point3 	*orig;
-	float		tmin;
-	float		tmax;
-} ray;
+	t_interval	itv;
+} t_ray;
 
 typedef struct s_sphere
 {
@@ -86,7 +96,7 @@ typedef struct s_camera
 	t_vec3	pixel_delta_down;
 	t_point3	camera_center;
 	t_point3	vp_upper_left;
-	t_point3	pixel00_loc;
+	t_point3	pixel00_loc_center;
 }t_camera;
 
 typedef enum e_object_id
@@ -125,7 +135,9 @@ typedef struct s_pixel
 	int	x;
 	int	y;
 	t_point3		center;
-	unsigned int	clr;
+	t_point3		top_left;
+	t_point3		start_sample;
+	t_color3		clr;
 }	t_pixel;
 
 typedef struct s_quadartic
@@ -162,25 +174,35 @@ void		vec3_add_cont(t_vec3 *v1, float t);
 t_vec3		vec3_sub_2inst_copy(t_vec3 v1, t_vec3 v2);
 void		vec3_sub_2inst(t_vec3 *v1, t_vec3 *v2);
 
+float	vec3_get_x(t_vec3 *v);
+float	vec3_get_y(t_vec3 *v);
+float	vec3_get_z(t_vec3 *v);
+
 // colors.c
 void write_color(t_color3 *c);
 
 // t_camera.c
 void init_camera_upper_left(t_camera *c);
-void init_pixel00(t_camera *c);
+void init_pixel00_center(t_camera *c);
 void init_camera(t_engine *e);
 t_point3 calculate_pixel_center(t_camera *c, int row, int col);
+t_point3 calculate_pixel_top_left(t_camera *c, int row, int col);
 
 // ray.c
-unsigned int ray_color(ray *r, t_engine *e);
-t_point3 point_at_ray(ray *r, float t);
-t_bool	hit_sphere(t_sphere *s, ray *r, t_hit *rec, float tmax);
+t_color3	ray_color(t_ray *r, t_engine *e);
+t_point3 point_at_ray(t_ray *r, float t);
+t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec);
+t_bool hit_object(t_engine *e, t_ray *r, t_hit *hit);
+unsigned int t_color3_to_uint(t_color3 c);
 
 // mlx_utils.c
 void	my_mlx_pixel_put(t_image *data, int x, int y, int color);
-void	update_pixel(t_engine *e);
+void	render(t_engine *e);
 void	init_img(t_engine *e);
 void	init_engine(char *argv[], t_engine *e);
+void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p);
+t_point3	get_sample_location(t_engine *e, t_pixel *p, int i, int j);
+void init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point);
 
 // math_utils.c
 void	solve_quadratic(t_quadratic *q);

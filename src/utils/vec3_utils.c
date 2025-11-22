@@ -112,3 +112,18 @@ float vec3_dot(t_vec3 *v1, t_vec3 *v2)
 			+ v1->e[Y] * v2->e[Y]
 			+ v1->e[Z] * v2->e[Z]);
 }
+
+float	vec3_get_x(t_vec3 *v)
+{
+	return (v->e[X]);
+}
+
+float	vec3_get_y(t_vec3 *v)
+{
+	return (v->e[Y]);
+}
+
+float	vec3_get_z(t_vec3 *v)
+{
+	return (v->e[Z]);
+}

@@ -14,13 +14,13 @@ void init_camera_upper_left(t_camera *c)
 	c->vp_upper_left = vp_upper_left;
 }
 
-void init_pixel00(t_camera *c)
+void init_pixel00_center(t_camera *c)
 {
 	t_vec3	pixel_delta_dr;
 
 	pixel_delta_dr = vec3_add_2inst_copy(c->pixel_delta_down, c->pixel_delta_right);
 	pixel_delta_dr = vec3_div_const_copy(pixel_delta_dr, 2.0);
-	c->pixel00_loc = vec3_add_2inst_copy(c->vp_upper_left, pixel_delta_dr);
+	c->pixel00_loc_center = vec3_add_2inst_copy(c->vp_upper_left, pixel_delta_dr);
 }
 
 void init_camera(t_engine *e)
@@ -35,7 +35,7 @@ void init_camera(t_engine *e)
 	e->cam.pixel_delta_right = vec3_div_const_copy(e->cam.vec_right, e->win_w);
 	e->cam.pixel_delta_down = vec3_div_const_copy(e->cam.vec_down, e->win_h);
 	init_camera_upper_left(&e->cam);
-	init_pixel00(&e->cam);
+	init_pixel00_center(&e->cam);
 }
 
 t_point3 calculate_pixel_center(t_camera *c, int row, int col)
@@ -48,7 +48,22 @@ t_point3 calculate_pixel_center(t_camera *c, int row, int col)
 	horizontal_shift = vec3_mul_const_copy(c->pixel_delta_right, row);
 	vertical_shift = vec3_mul_const_copy(c->pixel_delta_down, col);
 	total_shift = vec3_add_2inst_copy(horizontal_shift,vertical_shift);
-	pixel_center = vec3_add_2inst_copy(c->pixel00_loc, total_shift);
+	pixel_center = vec3_add_2inst_copy(c->pixel00_loc_center, total_shift);
 
 	return (pixel_center);
+}
+
+t_point3 calculate_pixel_top_left(t_camera *c, int row, int col)
+{
+	t_point3	pixel_top_left;
+	t_vec3	horizontal_shift;	
+	t_vec3	vertical_shift;
+	t_vec3	total_shift;
+
+	horizontal_shift = vec3_mul_const_copy(c->pixel_delta_right, row);
+	vertical_shift = vec3_mul_const_copy(c->pixel_delta_down, col);
+	total_shift = vec3_add_2inst_copy(horizontal_shift,vertical_shift);
+	pixel_top_left = vec3_add_2inst_copy(c->vp_upper_left, total_shift);
+
+	return (pixel_top_left);
 }

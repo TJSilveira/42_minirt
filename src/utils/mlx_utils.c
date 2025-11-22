@@ -8,10 +8,11 @@ void	my_mlx_pixel_put(t_image *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-void	update_pixel(t_engine *e)
+void	render(t_engine *e)
 {
-	t_pixel	p;
-	int		w;
+	t_pixel			p;
+	unsigned int	clr_uint;
+	int				w;
 
 	p.x = 0;
 	w = e->img.line_len / 4;
@@ -20,21 +21,76 @@ void	update_pixel(t_engine *e)
 		p.y = 0;
 		while (p.y < (int)e->win_h)
 		{
-			p.center = calculate_pixel_center(&e->cam,p.x,p.y);
-			t_vec3	ray_direction = vec3_sub_2inst_copy(p.center, e->cam.camera_center);
-			ray		r;
-
-			r.dir = &ray_direction;
-			r.orig = &e->cam.camera_center;
-			r.tmin = 0.0;
-			r.tmax = TMAX;
-
-            p.clr = ray_color(&r, e);
-			my_mlx_pixel_put(&e->img, p.x, p.y, p.clr);
+			p.clr = init_vec3(0, 0, 0);
+			get_pixel_color_anti_alaising_rt(e, &p);
+			clr_uint = t_color3_to_uint(p.clr);
+			// printf("This is the clr_uint %u\n", clr_uint);
+			my_mlx_pixel_put(&e->img, p.x, p.y, clr_uint);
 			p.y += 1;
 		}
 		p.x += 1;
 	}
+}
+
+void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p)
+{
+	t_ray		r;
+	t_point3	curr_sample;
+	int			i;
+	int			j;
+
+	p->top_left = calculate_pixel_top_left(&e->cam, p->x, p->y);
+	// printf("this is top_left:\n");
+	// print_vec3(&p->top_left);
+	// printf("this is vp_upper_left:\n");
+	// print_vec3(&e->cam.vp_upper_left);
+	// printf("this is right and down:\n");
+	// print_vec3(&e->cam.pixel_delta_right);
+	// print_vec3(&e->cam.pixel_delta_down);
+	i = 0;
+	while (i < RAY_SAMPLE_SIDE_SIZE)
+	{
+		j = 0;
+		while (j < RAY_SAMPLE_SIDE_SIZE)
+		{
+			curr_sample = get_sample_location(e, p, i, j);
+			// printf("this is sample %i and %i\n", i, j);
+			// print_vec3(&curr_sample);
+			
+			init_ray(&r, e, &curr_sample);
+            p->clr = vec3_add_2inst_copy(p->clr, vec3_div_const_copy(ray_color(&r, e), RAY_SAMPLE_SIDE_SIZE * RAY_SAMPLE_SIDE_SIZE));
+			// printf("this is the color:");
+			// print_vec3(&p->clr);
+			// printf("\n");
+			j++;
+		}
+		i++;
+	}
+}
+
+t_point3	get_sample_location(t_engine *e, t_pixel *p, int i, int j)
+{
+	t_point3	pixel_sample_delta;
+	t_point3	curr_sample;
+	float		x;
+	float		y;
+
+	x = (RAY_SAMPLE_PADDING + i * (1.0 - 2.0 * RAY_SAMPLE_PADDING) / (RAY_SAMPLE_SIDE_SIZE - 1.0)) * vec3_get_x(&e->cam.pixel_delta_right);
+	y = (RAY_SAMPLE_PADDING + j * (1.0 - 2.0 * RAY_SAMPLE_PADDING) / (RAY_SAMPLE_SIDE_SIZE - 1.0)) * vec3_get_y(&e->cam.pixel_delta_down);
+	pixel_sample_delta = init_vec3(x, y, 0.0);
+	curr_sample = vec3_add_2inst_copy(p->top_left, pixel_sample_delta);
+	return (curr_sample);
+}
+
+void init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point)
+{
+	t_vec3		ray_direction;
+
+	ray_direction = vec3_sub_2inst_copy(*dir_point, e->cam.camera_center);
+	ray->dir = ray_direction;
+	ray->orig = &e->cam.camera_center;
+	ray->itv.min = 0.0;
+	ray->itv.max = TMAX;
 }
 
 void	init_img(t_engine *e)
@@ -72,5 +128,5 @@ void	init_engine(char *argv[], t_engine *e)
 		print_vec3(&e->scene.objects[i]->sphere.color);
 	}
 	
-	update_pixel(e);
+	render(e);
 }
