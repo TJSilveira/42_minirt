@@ -22,11 +22,12 @@
 # define G 1
 # define B 2
 # define MAX_OBJECTS 100
-# define IMAGE_WIDTH 1800
+# define IMAGE_WIDTH 1200
 # define MAX_INT_COLOR 255
 # define TMAX 5000
 # define RAY_SAMPLE_SIDE_SIZE 2.0
 # define RAY_SAMPLE_PADDING 0.2
+# define EPSILON 0.00001
 
 # define PI 3.14159265
 
@@ -60,7 +61,7 @@ typedef struct s_interval
 typedef struct s_ray
 {
 	t_vec3 		dir;
-	t_point3 	*orig;
+	t_point3 	orig;
 	t_interval	itv;
 } t_ray;
 
@@ -70,6 +71,13 @@ typedef struct s_sphere
 	t_color3	color;
 	float 	ray;
 }t_sphere;
+
+typedef struct s_plane
+{
+	t_point3	point;
+	t_vec3		normal;
+	t_color3	color;
+}t_plane;
 
 typedef struct s_image
 {
@@ -101,13 +109,15 @@ typedef struct s_camera
 
 typedef enum e_object_id
 {
-	id_sphere
+	id_sphere,
+	id_plane
 } t_object_id;
 
 typedef union u_object
 {
 	t_object_id	id;
 	t_sphere	sphere;
+	t_plane		plane;
 } t_object;
 
 typedef struct s_scene
@@ -194,6 +204,8 @@ t_point3 point_at_ray(t_ray *r, float t);
 t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec);
 t_bool hit_object(t_engine *e, t_ray *r, t_hit *hit);
 unsigned int t_color3_to_uint(t_color3 c);
+void	record_hit (t_ray *r, t_hit *rec, t_vec3 *normal, float t);
+t_bool hit_object_function_selecter(t_object *obj, t_ray *r, t_hit *hit);
 
 // mlx_utils.c
 void	my_mlx_pixel_put(t_image *data, int x, int y, int color);

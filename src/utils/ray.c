@@ -5,7 +5,7 @@ t_point3 point_at_ray(t_ray *r, float t)
 	t_point3 result;
 
 	result = vec3_mul_const_copy(r->dir, t);
-	vec3_add_2inst(&result, r->orig);
+	vec3_add_2inst(&result, &r->orig);
 
 	return (result);
 }
@@ -57,7 +57,7 @@ t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec)
 	t_quadratic quad;
 	float	root;
 
-	oc = vec3_sub_2inst_copy(s->center, *r->orig);
+	oc = vec3_sub_2inst_copy(s->center, r->orig);
 	quad.a = vec3_dot(&r->dir, &r->dir);
 	quad.h = vec3_dot(&oc, &r->dir);
 	quad.c = vec3_dot(&oc, &oc) - (s->ray * s->ray);
@@ -71,11 +71,34 @@ t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec)
 		if (root <= r->itv.min || root >= r->itv.max)
 			return (FALSE);
 	}
-	rec->t = root;
-	rec->p = point_at_ray(r, root);
-	rec->normal = unit_vec3(&oc);
+	oc = unit_vec3(&oc);
+	record_hit(r, rec, &oc, root);
 	set_face_normal(r, rec);
 	return (TRUE);
+}
+
+/* Plane Intersection : https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection */
+t_bool	hit_plane (t_plane *p, t_ray *r, t_hit *rec)
+{
+	float	ln;
+	float	numerator;
+	t_vec3	p0_minus_l0;
+
+	ln = vec3_dot(&p->point, &r->orig);
+	p0_minus_l0 = vec3_sub_2inst_copy(p->point, r->orig);
+	numerator = vec3_dot(&p0_minus_l0, &p->normal);
+	if (ln < EPSILON && !(numerator < EPSILON))
+		return (FALSE);
+	record_hit(r, rec, &p->normal, numerator / ln);
+	return (TRUE);
+}
+
+void	record_hit (t_ray *r, t_hit *rec, t_vec3 *normal, float t)
+{
+	rec->t = t;
+	r->itv.max = t;
+	rec->p = point_at_ray(r, rec->t);
+	rec->normal = unit_vec3(normal);
 }
 
 t_bool hit_object(t_engine *e, t_ray *r, t_hit *hit)
@@ -87,11 +110,18 @@ t_bool hit_object(t_engine *e, t_ray *r, t_hit *hit)
 	hit_anything = FALSE;
 	while (e->scene.objects[++i])
 	{
-		if (hit_sphere(&e->scene.objects[i]->sphere, r, hit) == TRUE)
-		{
-			r->itv.max = hit->t;
+		if (hit_object_function_selecter(e->scene.objects[i], r, hit) == TRUE)
 			hit_anything = TRUE;
-		}
 	}
 	return (hit_anything);
 }
+
+t_bool hit_object_function_selecter(t_object *obj, t_ray *r, t_hit *hit)
+{
+	if (obj->id == id_sphere)
+		return (hit_sphere(&obj->sphere, r, hit));
+	else if (obj->id == id_plane)
+		return (hit_plane(&obj->plane, r, hit));
+	return (FALSE);
+}
+

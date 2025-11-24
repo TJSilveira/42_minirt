@@ -24,7 +24,6 @@ void	render(t_engine *e)
 			p.clr = init_vec3(0, 0, 0);
 			get_pixel_color_anti_alaising_rt(e, &p);
 			clr_uint = t_color3_to_uint(p.clr);
-			// printf("This is the clr_uint %u\n", clr_uint);
 			my_mlx_pixel_put(&e->img, p.x, p.y, clr_uint);
 			p.y += 1;
 		}
@@ -40,13 +39,6 @@ void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p)
 	int			j;
 
 	p->top_left = calculate_pixel_top_left(&e->cam, p->x, p->y);
-	// printf("this is top_left:\n");
-	// print_vec3(&p->top_left);
-	// printf("this is vp_upper_left:\n");
-	// print_vec3(&e->cam.vp_upper_left);
-	// printf("this is right and down:\n");
-	// print_vec3(&e->cam.pixel_delta_right);
-	// print_vec3(&e->cam.pixel_delta_down);
 	i = 0;
 	while (i < RAY_SAMPLE_SIDE_SIZE)
 	{
@@ -54,14 +46,8 @@ void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p)
 		while (j < RAY_SAMPLE_SIDE_SIZE)
 		{
 			curr_sample = get_sample_location(e, p, i, j);
-			// printf("this is sample %i and %i\n", i, j);
-			// print_vec3(&curr_sample);
-			
 			init_ray(&r, e, &curr_sample);
             p->clr = vec3_add_2inst_copy(p->clr, vec3_div_const_copy(ray_color(&r, e), RAY_SAMPLE_SIDE_SIZE * RAY_SAMPLE_SIDE_SIZE));
-			// printf("this is the color:");
-			// print_vec3(&p->clr);
-			// printf("\n");
 			j++;
 		}
 		i++;
@@ -88,7 +74,7 @@ void init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point)
 
 	ray_direction = vec3_sub_2inst_copy(*dir_point, e->cam.camera_center);
 	ray->dir = ray_direction;
-	ray->orig = &e->cam.camera_center;
+	ray->orig = e->cam.camera_center;
 	ray->itv.min = 0.0;
 	ray->itv.max = TMAX;
 }
