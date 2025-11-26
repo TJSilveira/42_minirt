@@ -38,6 +38,8 @@
 
 typedef enum e_bool {FALSE, TRUE}	t_bool;
 
+typedef union u_object t_object;
+
 typedef struct s_vec3 
 {
 	float e[3];
@@ -49,6 +51,8 @@ typedef struct s_hit
 	t_vec3		normal;
 	float		t;
 	t_bool		inside_face;
+	t_object	*hit_obj;
+	t_color3	color;
 }t_hit;
 
 typedef struct s_interval
@@ -79,6 +83,24 @@ typedef struct s_plane
 	t_color3	color;
 }t_plane;
 
+typedef struct s_cylinder
+{
+	t_point3	center;
+	t_vec3		normal;
+	float		diam;
+	float		h;
+	t_color3	color;
+} t_cylinder;
+
+typedef struct s_light
+{
+	t_point3	center;
+	float		brig;
+	float		diam;
+	float		h;
+	t_color3	color;
+} t_light;
+
 typedef struct s_image
 {
 	void			*img;
@@ -87,9 +109,6 @@ typedef struct s_image
 	int				line_len;
 	int				endian;
 	int				iter;
-	// int				fractal_type;
-	// unsigned int	main_color;
-	// unsigned int	secundary_color;
 }	t_image;
 
 typedef struct s_camera
@@ -110,7 +129,8 @@ typedef struct s_camera
 typedef enum e_object_id
 {
 	id_sphere,
-	id_plane
+	id_plane,
+	id_cylinder
 } t_object_id;
 
 typedef union u_object
@@ -118,14 +138,16 @@ typedef union u_object
 	t_object_id	id;
 	t_sphere	sphere;
 	t_plane		plane;
+	t_cylinder	cylinder;
 } t_object;
 
 typedef struct s_scene
 {
 	t_object	**objects;
+	t_light		**lights;
 	size_t		count;
 	size_t		capacity;
-}t_scene;
+} t_scene;
 
 typedef struct s_engine
 {
@@ -218,6 +240,7 @@ void init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point);
 
 // math_utils.c
 void	solve_quadratic(t_quadratic *q);
+float	ft_fabs(float num);
 
 // scene.c
 void create_scene(char *argv[], t_engine *e);

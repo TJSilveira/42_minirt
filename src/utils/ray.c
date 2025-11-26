@@ -13,7 +13,7 @@ t_point3 point_at_ray(t_ray *r, float t)
 unsigned int t_color3_to_uint(t_color3 c)
 {
 	unsigned int color_final;
-	
+
 	color_final = 0;
     color_final |= (unsigned int)(c.e[B] * 255);
     color_final |= (unsigned int)(c.e[G] * 255) << 8;
@@ -23,16 +23,16 @@ unsigned int t_color3_to_uint(t_color3 c)
 
 t_color3	ray_color(t_ray *r, t_engine *e)
 {
-	t_vec3	n;
 	t_hit	hit;
 
+	hit = (t_hit){0};
 	t_color3 blue = {{0.5,0.7,1.0}};
 	t_color3 black = {{1.0,1.0,1.0}};
 	if (hit_object(e,r,&hit) == TRUE)
 	{
-		n = vec3_add_2inst_copy(hit.normal, black);
-		vec3_mul_const(&n, 0.5);
-		return (n);
+		printf("This is the color:");
+		print_vec3(&hit.color);
+		return (hit.color);
 	}
 	t_vec3 unit_direction = unit_vec3(&r->dir);
 	float a = 0.5 * (unit_direction.e[1] + 1.0);
@@ -54,6 +54,7 @@ void set_face_normal(t_ray *r, t_hit *rec)
 t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec)
 {
 	t_vec3	oc;
+	t_vec3	normal;
 	t_quadratic quad;
 	float	root;
 
@@ -71,25 +72,31 @@ t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *rec)
 		if (root <= r->itv.min || root >= r->itv.max)
 			return (FALSE);
 	}
-	oc = unit_vec3(&oc);
-	record_hit(r, rec, &oc, root);
+	rec->p = point_at_ray(r, root);
+	normal = vec3_sub_2inst_copy(rec->p, s->center);
+	normal = unit_vec3(&normal);
+	record_hit(r, rec, &normal, root);
 	set_face_normal(r, rec);
+	rec->color = s->color;
 	return (TRUE);
 }
 
 /* Plane Intersection : https://en.wikipedia.org/wiki/Line%E2%80%93plane_intersection */
 t_bool	hit_plane (t_plane *p, t_ray *r, t_hit *rec)
 {
-	float	ln;
-	float	numerator;
+	float	denominator;
+	float	t;
 	t_vec3	p0_minus_l0;
 
-	ln = vec3_dot(&p->point, &r->orig);
-	p0_minus_l0 = vec3_sub_2inst_copy(p->point, r->orig);
-	numerator = vec3_dot(&p0_minus_l0, &p->normal);
-	if (ln < EPSILON && !(numerator < EPSILON))
+	denominator = vec3_dot(&p->normal, &r->dir);
+	if (ft_fabs(denominator) < EPSILON)
 		return (FALSE);
-	record_hit(r, rec, &p->normal, numerator / ln);
+	p0_minus_l0 = vec3_sub_2inst_copy(p->point, r->orig);
+	t = vec3_dot(&p0_minus_l0, &p->normal) / denominator;
+	if (t <= r->itv.min || t >= r->itv.max)
+		return (FALSE);
+	record_hit(r, rec, &p->normal, t);
+	rec->color = p->color;
 	return (TRUE);
 }
 
@@ -111,7 +118,10 @@ t_bool hit_object(t_engine *e, t_ray *r, t_hit *hit)
 	while (e->scene.objects[++i])
 	{
 		if (hit_object_function_selecter(e->scene.objects[i], r, hit) == TRUE)
+		{
 			hit_anything = TRUE;
+			hit->hit_obj = e->scene.objects[i];
+		}
 	}
 	return (hit_anything);
 }
@@ -124,4 +134,3 @@ t_bool hit_object_function_selecter(t_object *obj, t_ray *r, t_hit *hit)
 		return (hit_plane(&obj->plane, r, hit));
 	return (FALSE);
 }
-

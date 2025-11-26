@@ -36,6 +36,28 @@ int rt_import_sphere(char **params, t_scene *s)
 	return(EXIT_SUCCESS);
 }
 
+int rt_import_plane(char **params, t_scene *s)
+{
+	int			i;
+	t_object	*pl;
+	
+	i = -1;
+	pl = malloc(sizeof(t_object));
+	while (params[++i]);
+	if (i != NUM_PARAM_SPHERE)
+		return (EXIT_FAILURE);
+	if (rt_import_vec3(params[0], &pl->plane.point) == EXIT_FAILURE ||
+		rt_import_vec3(params[1], &pl->plane.normal) == EXIT_FAILURE ||
+		rt_import_color(params[2], &pl->plane.color) == EXIT_FAILURE)
+	{
+		free(pl);
+		return (EXIT_FAILURE);		
+	}
+	pl->id = id_plane;
+	add_object_to_scene(s, pl);
+	return(EXIT_SUCCESS);
+}
+
 int rt_import_color(char *param, t_vec3 *vec)
 {
 	char	**nums;
@@ -89,8 +111,10 @@ int rt_import_vec3 (char *param, t_vec3 *vec)
 
 int rt_importer_params(char **params, t_scene *s)
 {
-	if (ft_strncmp(params[0], "sp", 2) == 0)
+	if (ft_strncmp(params[0], "sp", 2) == 0 && ft_strlen(params[0]) == 2)
 		return(rt_import_sphere(&params[1], s));
+	if (ft_strncmp(params[0], "pl", 2) == 0 && ft_strlen(params[0]) == 2)
+		return(rt_import_plane(&params[1], s));
 	return (EXIT_FAILURE);
 }
 

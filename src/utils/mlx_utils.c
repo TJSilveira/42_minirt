@@ -24,6 +24,7 @@ void	render(t_engine *e)
 			p.clr = init_vec3(0, 0, 0);
 			get_pixel_color_anti_alaising_rt(e, &p);
 			clr_uint = t_color3_to_uint(p.clr);
+			printf("This is the unsigned int: %u\n",clr_uint);
 			my_mlx_pixel_put(&e->img, p.x, p.y, clr_uint);
 			p.y += 1;
 		}
@@ -109,9 +110,9 @@ void	init_engine(char *argv[], t_engine *e)
 	for (size_t i = 0; e->scene.objects[i]; i++)
 	{
 		printf("Object %li\n", i);
-		print_vec3(&e->scene.objects[i]->sphere.center);
-		printf("%f\n", e->scene.objects[i]->sphere.ray);
-		print_vec3(&e->scene.objects[i]->sphere.color);
+		print_vec3(&e->scene.objects[i]->plane.point);
+		print_vec3(&e->scene.objects[i]->plane.normal);
+		print_vec3(&e->scene.objects[i]->plane.color);
 	}
 	
 	render(e);
