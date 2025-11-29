@@ -35,9 +35,12 @@ void create_scene(char *argv[], t_engine *e)
 	while (buffer)
 	{
 		params = rt_file_parser(buffer);
-		rt_importer_params(params, e);
+		if (rt_importer_params(params, e) == EXIT_FAILURE)
+			error_handler("Failure importing parameters\n", e);
 		free(buffer);
+		free_arrays(params);
 		buffer = NULL;
 		buffer = get_next_line(fd, TO_USE);
 	}
+	close(fd);
 }

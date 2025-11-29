@@ -85,7 +85,7 @@ void	init_img(t_engine *e)
 	if (!e->img.img)
 	{
 		ft_putstr_fd("Error: Failed to create image\n", 2);
-		// TODO cleanup_engine(e);
+		cleanup_engine(e);
 		exit(EXIT_FAILURE);
 	}
 	e->img.addr = mlx_get_data_addr(e->img.img, &e->img.pix_bits,
@@ -190,4 +190,73 @@ void	print_scene_plane(t_object *obj)
 		print_vec3(&obj->plane.point);
 		printf("\n");
 	}
+}
+
+void	cleanup_engine(t_engine *e)
+{
+	cleanup_scene(e);
+	cleanup_image(e);
+	if (e->window)
+	{
+		mlx_destroy_window(e->mlx, e->window);
+		e->window = NULL;
+	}
+	if (e->mlx)
+	{
+		mlx_destroy_display(e->mlx);
+		free(e->mlx);
+		e->mlx = NULL;
+	}
+}
+
+void	cleanup_scene(t_engine *e)
+{
+	size_t	i;
+
+	i = 0;
+	while (e->scene.lights && i < e->scene.l_count)
+		free(e->scene.lights[i++]);
+	if (e->scene.lights)
+		free(e->scene.lights);
+	e->scene.lights = NULL;
+	i = 0;
+	while (e->scene.objects && i < e->scene.obj_count)
+		free(e->scene.objects[i++]);
+	if (e->scene.objects)
+		free(e->scene.objects);
+	e->scene.objects = NULL;
+	if (e->scene.amb)
+		free(e->scene.amb);
+	e->scene.amb = NULL;
+	if (e->cam)
+		free(e->cam);
+	e->cam = NULL;
+}
+
+void	cleanup_image(t_engine *e)
+{
+	if (!e)
+		return ;
+	if (e->img.img && e->mlx)
+	{
+		mlx_destroy_image(e->mlx, e->img.img);
+		e->img.img = NULL;
+	}
+}
+
+void	show_help()
+{
+	ft_putstr_fd("\n", 1);
+	ft_putstr_fd(" +--------------- Let me help you! --------------+\n", 1);
+	ft_putstr_fd(" |                                               |\n", 1);
+	ft_putstr_fd(" | Usage: ./bin/minirt [file.rt]                 |\n", 1);
+	ft_putstr_fd(" |                                               |\n", 1);
+	ft_putstr_fd(" | e.g: ./bin/fractol test1.rt                   |\n", 1);
+	ft_putstr_fd(" |                                               |\n", 1);
+	ft_putstr_fd(" |------------------- KEYBOARD ------------------|\n", 1);
+	ft_putstr_fd(" |                                               |\n", 1);
+	ft_putstr_fd(" | Press ESC to close the window                 |\n", 1);
+	ft_putstr_fd(" +-----------------------------------------------+\n", 1);
+	ft_putstr_fd("\n", 1);
+	exit(EXIT_SUCCESS);
 }

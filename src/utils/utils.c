@@ -8,9 +8,11 @@ void	free_arrays(char **arrays)
 	while (arrays != NULL && arrays[i])
 	{
 		free(arrays[i]);
+		arrays[i] = NULL;
 		i++;
 	}
 	free(arrays);
+	arrays = NULL;
 }
 
 int	return_and_free_array(int exit_value, char **arrays)
@@ -96,4 +98,11 @@ t_bool is_int_color(char *num)
 			return (FALSE);		
 	}
 	return (TRUE);	
+}
+
+void	error_handler(char *msg, t_engine *e)
+{
+	ft_putstr_fd("Error\n", STDERR_FILENO);
+	ft_putstr_fd(msg, STDERR_FILENO);
+	cleanup_engine(e);
 }

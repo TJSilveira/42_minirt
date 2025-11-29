@@ -94,6 +94,7 @@ int rt_import_ambient(char **params, t_scene *s)
 	if (rt_import_float(params[0], &s->amb->intensity) == EXIT_FAILURE ||
 		rt_import_color(params[1], &s->amb->color) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
+	s->amb->has_ambient = 1;
 	return(EXIT_SUCCESS);
 }
 
@@ -110,7 +111,7 @@ int rt_import_camera(char **params, t_engine *e)
 		return (EXIT_FAILURE);
 	if (rt_import_vec3(params[0], &e->cam->camera_center) == EXIT_FAILURE ||
 		rt_import_vec3_normalized(params[1], &e->cam->direction) == EXIT_FAILURE ||
-		rt_import_fov(params[2], &e->cam->fov))
+		rt_import_fov(params[2], &e->cam->fov) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
 	return(EXIT_SUCCESS);
 }
@@ -210,6 +211,7 @@ int rt_importer_params(char **params, t_engine *e)
 		return(rt_import_ambient(&params[1], &e->scene));
 	if (ft_strncmp(params[0], "C", 1) == 0 && ft_strlen(params[0]) == 1)
 		return(rt_import_camera(&params[1], e));
+	free_arrays(params);
 	return (EXIT_FAILURE);
 }
 
@@ -219,5 +221,9 @@ void rt_extension_check(char *argv[])
 
 	ext = ft_strrchr(argv[1],'.');
 	if (!ext || ft_strncmp(ext, ".rt",3) != 0)
+	{
+		printf("The file used does not comply with the extension \
+			requirements. You need to provide a .rt file\n");
 		exit (EXIT_FAILURE); // TODO: Error Handler
+	}
 }

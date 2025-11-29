@@ -52,6 +52,9 @@ static void	split_loop(char const *s, char c, t_split *sp)
 		{
 			while (--sp->index >= 0)
 				free(sp->dest[sp->index]);
+			free(sp->dest);
+			sp->dest = NULL;
+			return ;
 		}
 		sp->index++;
 	}

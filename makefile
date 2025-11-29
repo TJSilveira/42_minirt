@@ -84,6 +84,6 @@ test: re
 rebonus: fclean bonus
 
 valgrind:
-	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./minirt
+	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./bin/minirt test1.rt
 
 .PHONY: all clean fclean re

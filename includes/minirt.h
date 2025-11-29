@@ -22,7 +22,7 @@
 # define G 1
 # define B 2
 # define MAX_OBJECTS 100
-# define IMAGE_WIDTH 1200
+# define IMAGE_WIDTH 400
 # define MAX_INT_COLOR 255
 # define TMAX 5000
 # define RAY_SAMPLE_SIDE_SIZE 2.0
@@ -204,6 +204,7 @@ void print_vec3(t_vec3 *v);
 t_vec3 init_vec3(float x, float y, float z);
 t_vec3 unit_vec3(t_vec3 *v);
 float vec3_dot(t_vec3 *v1, t_vec3 *v2);
+void	error_handler(char *msg, t_engine *e);
 
 float		length_squared(t_vec3 *v);
 float		length(t_vec3 *v);
@@ -270,6 +271,10 @@ void	print_scene_objects(t_engine *e);
 void	print_scene_sphere(t_object *obj);
 void	print_scene_plane(t_object *obj);
 t_vec3	vec3_cross(t_vec3 *v1, t_vec3 *v2);
+void	cleanup_engine(t_engine *e);
+void	cleanup_scene(t_engine *e);
+void	cleanup_image(t_engine *e);
+void	show_help();
 
 
 // math_utils.c
@@ -302,5 +307,8 @@ t_bool is_int_color(char *num);
 
 // light.c
 t_bool in_shadow(t_engine *e, t_light *l, t_hit *hit);
+
+// events.c
+int	close_win(t_engine *engine);
 
 #endif
