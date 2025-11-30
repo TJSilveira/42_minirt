@@ -14,13 +14,15 @@ char **rt_file_parser(char* buffer)
 	return(res);
 }
 
-int rt_import_sphere(char **params, t_scene *s)
+int rt_import_sphere(char **params, t_engine *e)
 {
 	int			i;
 	t_object	*sp;
 	
 	i = -1;
 	sp = malloc(sizeof(t_object));
+	if(!sp)
+		error_handler("Malloc was not successful.\n", e);
 	while (params[++i]);
 	if (i != NUM_PARAM_SPHERE)
 		return (EXIT_FAILURE);
@@ -32,17 +34,19 @@ int rt_import_sphere(char **params, t_scene *s)
 		return (EXIT_FAILURE);		
 	}
 	sp->id = id_sphere;
-	add_object_to_scene(s, sp);
+	add_object_to_scene(&e->scene, sp);
 	return(EXIT_SUCCESS);
 }
 
-int rt_import_plane(char **params, t_scene *s)
+int rt_import_plane(char **params, t_engine *e)
 {
 	int			i;
 	t_object	*pl;
 	
 	i = -1;
 	pl = malloc(sizeof(t_object));
+	if (!pl)
+		error_handler("Malloc was not successful.\n", e);
 	while (params[++i]);
 	if (i != NUM_PARAM_PLANE)
 		return (EXIT_FAILURE);
@@ -55,17 +59,19 @@ int rt_import_plane(char **params, t_scene *s)
 	}
 	pl->id = id_plane;
 	pl->plane.normal = unit_vec3(&pl->plane.normal);
-	add_object_to_scene(s, pl);
+	add_object_to_scene(&e->scene, pl);
 	return(EXIT_SUCCESS);
 }
 
-int rt_import_light(char **params, t_scene *s)
+int rt_import_light(char **params, t_engine *e)
 {
 	int		i;
 	t_light	*l;
 	
 	i = -1;
 	l = malloc(sizeof(t_light));
+	if (!l)
+		error_handler("Malloc was not successful.\n", e);
 	while (params[++i]);
 	if (i != NUM_PARAM_LIGHT)
 		return (EXIT_FAILURE);
@@ -76,25 +82,27 @@ int rt_import_light(char **params, t_scene *s)
 		free(l);
 		return (EXIT_FAILURE);
 	}
-	add_light_to_scene(s, l);
+	add_light_to_scene(&e->scene, l);
 	return(EXIT_SUCCESS);
 }
 
-int rt_import_ambient(char **params, t_scene *s)
+int rt_import_ambient(char **params, t_engine *e)
 {
 	int		i;
 	
-	if (s->amb)
+	if (e->scene.amb)
 		return (EXIT_FAILURE);
-	s->amb = malloc(sizeof(t_ambient));
+	e->scene.amb = malloc(sizeof(t_ambient));
+	if(!e->scene.amb)
+		error_handler("Malloc was not successful.\n", e);
 	i = -1;
 	while (params[++i]);
 	if (i != NUM_PARAM_AMBIENT)
 		return (EXIT_FAILURE);
-	if (rt_import_float(params[0], &s->amb->intensity) == EXIT_FAILURE ||
-		rt_import_color(params[1], &s->amb->color) == EXIT_FAILURE)
+	if (rt_import_float(params[0], &e->scene.amb->intensity) == EXIT_FAILURE ||
+		rt_import_color(params[1], &e->scene.amb->color) == EXIT_FAILURE)
 		return (EXIT_FAILURE);
-	s->amb->has_ambient = 1;
+	e->scene.amb->has_ambient = 1;
 	return(EXIT_SUCCESS);
 }
 
@@ -105,6 +113,8 @@ int rt_import_camera(char **params, t_engine *e)
 	if (e->cam)
 		return (EXIT_FAILURE);
 	e->cam = malloc(sizeof(t_camera));
+	if(!e->cam)
+		error_handler("Malloc was not successful.\n", e);
 	i = -1;
 	while (params[++i]);
 	if (i != NUM_PARAM_CAMERA)
@@ -202,13 +212,13 @@ int rt_import_vec3_normalized (char *param, t_vec3 *vec)
 int rt_importer_params(char **params, t_engine *e)
 {
 	if (ft_strncmp(params[0], "sp", 2) == 0 && ft_strlen(params[0]) == 2)
-		return(rt_import_sphere(&params[1], &e->scene));
+		return(rt_import_sphere(&params[1], e));
 	if (ft_strncmp(params[0], "pl", 2) == 0 && ft_strlen(params[0]) == 2)
-		return(rt_import_plane(&params[1], &e->scene));
+		return(rt_import_plane(&params[1], e));
 	if (ft_strncmp(params[0], "L", 1) == 0 && ft_strlen(params[0]) == 1)
-		return(rt_import_light(&params[1], &e->scene));
+		return(rt_import_light(&params[1], e));
 	if (ft_strncmp(params[0], "A", 1) == 0 && ft_strlen(params[0]) == 1)
-		return(rt_import_ambient(&params[1], &e->scene));
+		return(rt_import_ambient(&params[1], e));
 	if (ft_strncmp(params[0], "C", 1) == 0 && ft_strlen(params[0]) == 1)
 		return(rt_import_camera(&params[1], e));
 	free_arrays(params);
@@ -222,8 +232,8 @@ void rt_extension_check(char *argv[])
 	ext = ft_strrchr(argv[1],'.');
 	if (!ext || ft_strncmp(ext, ".rt",3) != 0)
 	{
-		printf("The file used does not comply with the extension \
-			requirements. You need to provide a .rt file\n");
-		exit (EXIT_FAILURE); // TODO: Error Handler
+		ft_putstr_fd("The file used does not comply with the extension \
+			requirements. You need to provide a .rt file\n", STDERR_FILENO);
+		exit (EXIT_FAILURE);
 	}
 }

@@ -1,5 +1,16 @@
 #include "../includes/minirt.h"
 
+void init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point)
+{
+	t_vec3		ray_direction;
+
+	ray_direction = vec3_sub_2inst_copy(*dir_point, e->cam->camera_center);
+	ray->dir = ray_direction;
+	ray->orig = e->cam->camera_center;
+	ray->itv.min = 0.0;
+	ray->itv.max = TMAX;
+}
+
 t_point3 point_at_ray(t_ray *r, float t)
 {
 	t_point3 result;

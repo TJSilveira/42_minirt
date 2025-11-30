@@ -105,4 +105,5 @@ void	error_handler(char *msg, t_engine *e)
 	ft_putstr_fd("Error\n", STDERR_FILENO);
 	ft_putstr_fd(msg, STDERR_FILENO);
 	cleanup_engine(e);
+	exit(EXIT_FAILURE);
 }

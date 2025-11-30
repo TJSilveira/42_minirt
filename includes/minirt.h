@@ -39,6 +39,11 @@
 
 # define SPECULAR_PARAM 16.0
 
+# define KEY_ESC 65307
+# define UPARROW 65362
+# define DOWNARROW 65364
+# define LEFTARROW 65361
+# define RIGHTARROW 65363
 
 #include <stdio.h>
 
@@ -234,8 +239,8 @@ void write_color(t_color3 *c);
 
 // t_camera.c
 void init_camera_upper_left(t_camera *c);
-void init_pixel00_center(t_camera *c);
-void init_camera(t_engine *e);
+void init_pixel00_center(t_engine *e);
+void update_camera_location(t_engine *e);
 t_point3 calculate_pixel_center(t_camera *c, int row, int col);
 t_point3 calculate_pixel_top_left(t_camera *c, int row, int col);
 
@@ -264,7 +269,7 @@ void	init_engine(char *argv[], t_engine *e);
 void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p);
 t_point3	get_sample_location(t_engine *e, t_pixel *p, int i, int j);
 void 	init_ray(t_ray *ray, t_engine *e, t_point3 *dir_point);
-void	print_scene(t_engine *e);
+void	print_scene_elements(t_engine *e);
 void	print_scene_ambient(t_engine *e);
 void	print_scene_lights(t_engine *e);
 void	print_scene_objects(t_engine *e);
@@ -282,13 +287,17 @@ void	solve_quadratic(t_quadratic *q);
 float	degrees_to_radians(float degrees);
 
 // scene.c
-void create_scene(char *argv[], t_engine *e);
+void import_rt_file_definitions(char *argv[], t_engine *e);
 void add_object_to_scene(t_scene *s, t_object *o);
 void add_light_to_scene(t_scene *s, t_light *light);
 
 // import.c
 char	**rt_file_parser(char* buffer);
-int		rt_import_sphere(char **params, t_scene *s);
+int		rt_import_sphere(char **params, t_engine *e);
+int		rt_import_plane(char **params, t_engine *e);
+int		rt_import_light(char **params, t_engine *e);
+int		rt_import_ambient(char **params, t_engine *e);
+int		rt_import_camera(char **params, t_engine *e);
 int		rt_import_color(char *param, t_vec3 *vec);
 int		rt_import_float(char *param, float *result);
 int		rt_import_vec3 (char *param, t_vec3 *vec);
@@ -310,5 +319,6 @@ t_bool in_shadow(t_engine *e, t_light *l, t_hit *hit);
 
 // events.c
 int	close_win(t_engine *engine);
+int	key_fig(int key, t_engine *e);
 
 #endif

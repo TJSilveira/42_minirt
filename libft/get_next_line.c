@@ -100,11 +100,14 @@ char	*read_buffer(int fd, char *buffer)
 	str = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (!str)
 	{
-		free(str);
+		free(buffer);
 		return (NULL);
 	}
 	if (read_buffer_loop(fd, &buffer, &str))
+	{
+		free(buffer);
 		return (NULL);
+	}
 	free(str);
 	return (buffer);
 }
