@@ -10,7 +10,7 @@ NAME = minirt
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra #-DVALGRIND
 
 # Includes
 INCLUDES = -I ./includes/
@@ -83,10 +83,10 @@ test: re
 
 rebonus: fclean bonus
 
-valgrind:
+valgrind: re
 	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./bin/minirt test1.rt
 
-run:
+run: re
 	@./bin/minirt test1.rt
 
 .PHONY: all clean fclean re

@@ -62,10 +62,10 @@ void	print_scene_sphere(t_object *obj)
 	{
 		printf("[SPHERE]\n");
 		printf("Color:\n");
-		print_vec3(&obj->sphere.color);
+		print_vec3(&obj->obj_union.sphere.color);
 		printf("Center:\n");
-		print_vec3(&obj->sphere.center);
-		printf("Ray: %f\n", obj->sphere.ray);
+		print_vec3(&obj->obj_union.sphere.center);
+		printf("Ray: %f\n", obj->obj_union.sphere.ray);
 		printf("\n");
 	}
 }
@@ -76,11 +76,11 @@ void	print_scene_plane(t_object *obj)
 	{
 		printf("[PLANE]\n");
 		printf("Color:\n");
-		print_vec3(&obj->plane.color);
+		print_vec3(&obj->obj_union.plane.color);
 		printf("Normal:\n");
-		print_vec3(&obj->plane.normal);
+		print_vec3(&obj->obj_union.plane.normal);
 		printf("Point:\n");
-		print_vec3(&obj->plane.point);
+		print_vec3(&obj->obj_union.plane.point);
 		printf("\n");
 	}
 }

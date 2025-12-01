@@ -2,7 +2,7 @@
 
 void	print_vec3(t_vec3 *v)
 {
-    printf("%f.%f.%f\n", v->e[0], v->e[1], v->e[2]);
+    printf("%f; %f; %f;\n", v->e[0], v->e[1], v->e[2]);
 }
 
 t_vec3	init_vec3(float x, float y, float z)

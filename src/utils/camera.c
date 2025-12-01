@@ -58,10 +58,8 @@ void	resize_camera_orthogonal_vectors(t_engine *e, t_vec3 *up)
 {
 	e->cam->vec_right = vec3_mul_const_copy(e->cam->vec_right, -e->cam->vp_width);
 	e->cam->vec_down = vec3_mul_const_copy(*up, e->cam->vp_height);
-	e->cam->vec_focal = vec3_mul_const_copy(e->cam->direction, e->cam->focal_length);
+	e->cam->vec_focal = vec3_mul_const_copy(e->cam->direction, -e->cam->focal_length);
 }
-
-
 
 void	update_camera_location(t_engine *e)
 {

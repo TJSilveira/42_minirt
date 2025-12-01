@@ -65,7 +65,7 @@ void	show_help()
 	ft_putstr_fd(" |                                               |\n", 1);
 	ft_putstr_fd(" | Usage: ./bin/minirt [file.rt]                 |\n", 1);
 	ft_putstr_fd(" |                                               |\n", 1);
-	ft_putstr_fd(" | e.g: ./bin/fractol test1.rt                   |\n", 1);
+	ft_putstr_fd(" | e.g: ./bin/minirt test1.rt                    |\n", 1);
 	ft_putstr_fd(" |                                               |\n", 1);
 	ft_putstr_fd(" |------------------- KEYBOARD ------------------|\n", 1);
 	ft_putstr_fd(" |                                               |\n", 1);

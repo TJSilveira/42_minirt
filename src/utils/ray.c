@@ -244,9 +244,9 @@ t_bool hit_occluded(t_engine *e, t_ray *r)
 t_bool hit_object_function_selecter(t_object *obj, t_ray *r, t_hit *hit)
 {
 	if (obj->id == id_sphere)
-		return (hit_sphere(&obj->sphere, r, hit));
+		return (hit_sphere(&obj->obj_union.sphere, r, hit));
 	else if (obj->id == id_plane)
-		return (hit_plane(&obj->plane, r, hit));
+		return (hit_plane(&obj->obj_union.plane, r, hit));
 	return (FALSE);
 }
 

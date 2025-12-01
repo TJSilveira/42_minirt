@@ -26,9 +26,9 @@ int rt_import_sphere(char **params, t_engine *e)
 	while (params[++i]);
 	if (i != NUM_PARAM_SPHERE)
 		return (EXIT_FAILURE);
-	if (rt_import_vec3(params[0], &sp->sphere.center) == EXIT_FAILURE ||
-		rt_import_float(params[1], &sp->sphere.ray) == EXIT_FAILURE ||
-		rt_import_color(params[2], &sp->sphere.color) == EXIT_FAILURE)
+	if (rt_import_vec3(params[0], &sp->obj_union.sphere.center) == EXIT_FAILURE ||
+		rt_import_float(params[1], &sp->obj_union.sphere.ray) == EXIT_FAILURE ||
+		rt_import_color(params[2], &sp->obj_union.sphere.color) == EXIT_FAILURE)
 	{
 		free(sp);
 		return (EXIT_FAILURE);		
@@ -50,15 +50,15 @@ int rt_import_plane(char **params, t_engine *e)
 	while (params[++i]);
 	if (i != NUM_PARAM_PLANE)
 		return (EXIT_FAILURE);
-	if (rt_import_vec3(params[0], &pl->plane.point) == EXIT_FAILURE ||
-		rt_import_vec3(params[1], &pl->plane.normal) == EXIT_FAILURE ||
-		rt_import_color(params[2], &pl->plane.color) == EXIT_FAILURE)
+	if (rt_import_vec3(params[0], &pl->obj_union.plane.point) == EXIT_FAILURE ||
+		rt_import_vec3(params[1], &pl->obj_union.plane.normal) == EXIT_FAILURE ||
+		rt_import_color(params[2], &pl->obj_union.plane.color) == EXIT_FAILURE)
 	{
 		free(pl);
 		return (EXIT_FAILURE);		
 	}
 	pl->id = id_plane;
-	pl->plane.normal = unit_vec3(&pl->plane.normal);
+	pl->obj_union.plane.normal = unit_vec3(&pl->obj_union.plane.normal);
 	add_object_to_scene(&e->scene, pl);
 	return(EXIT_SUCCESS);
 }
