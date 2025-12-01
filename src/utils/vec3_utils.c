@@ -12,17 +12,17 @@ t_vec3	init_vec3(float x, float y, float z)
 
 t_vec3	unit_vec3(t_vec3 *v)
 {
-	return (vec3_div_const_copy(*v, length(v)));
+	return (vec3_div_const_copy(*v, vec3_length(v)));
 }
 
-float	length_squared(t_vec3 *v)
+float	vec3_length_squared(t_vec3 *v)
 {
 	return (v->e[0]*v->e[0] + v->e[1] * v->e[1] + v->e[2] * v->e[2]);
 }
 
-float	length(t_vec3 *v)
+float	vec3_length(t_vec3 *v)
 {
-	return (sqrt(length_squared(v)));
+	return (sqrt(vec3_length_squared(v)));
 }
 
 t_vec3	vec3_mul_const_copy(t_vec3 v, float t)

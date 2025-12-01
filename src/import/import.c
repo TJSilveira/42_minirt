@@ -122,7 +122,7 @@ int rt_import_camera(char **params, t_engine *e)
 	if (rt_import_vec3(params[0], &e->cam->camera_center) == EXIT_FAILURE ||
 		rt_import_vec3_normalized(params[1], &e->cam->direction) == EXIT_FAILURE ||
 		rt_import_fov(params[2], &e->cam->fov) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
+		error_handler("Camera inputs not provided correctly\n", e);
 	return(EXIT_SUCCESS);
 }
 
@@ -204,7 +204,7 @@ int rt_import_vec3_normalized (char *param, t_vec3 *vec)
 	i = -1;
 	while (nums[++i])
 		ft_str_to_float(nums[i], &vec->e[i]);
-	if (length(vec) - 1 < EPSILON)
+	if (vec3_length(vec) - 1 < EPSILON)
 		return(return_and_free_array(EXIT_SUCCESS, nums));
 	return(return_and_free_array(EXIT_FAILURE, nums));	
 }

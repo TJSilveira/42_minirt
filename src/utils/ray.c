@@ -123,7 +123,7 @@ t_color3	ray_color_specular_light(t_light *l, t_hit *hit, t_ray *r)
 	float		n_dot_l;
 
 	light_ray.dir = vec3_sub_2inst_copy(l->center, hit->p);
-	unit_vec3(&light_ray.dir);
+	light_ray.dir = unit_vec3(&light_ray.dir);
 	reflected_ray.dir = hit->normal;
 	n_dot_l = vec3_dot(&hit->normal, &light_ray.dir);
 	vec3_mul_const(&reflected_ray.dir, 2.0 * n_dot_l);

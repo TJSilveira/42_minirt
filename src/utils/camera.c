@@ -56,7 +56,7 @@ void	init_camera_orthogonal_vectors(t_engine *e, t_vec3 *up)
 
 void	resize_camera_orthogonal_vectors(t_engine *e, t_vec3 *up)
 {
-	e->cam->vec_right = vec3_mul_const_copy(e->cam->vec_right, -e->cam->vp_width);
+	e->cam->vec_right = vec3_mul_const_copy(e->cam->vec_right, e->cam->vp_width);
 	e->cam->vec_down = vec3_mul_const_copy(*up, e->cam->vp_height);
 	e->cam->vec_focal = vec3_mul_const_copy(e->cam->direction, -e->cam->focal_length);
 }
@@ -65,6 +65,8 @@ void	update_camera_location(t_engine *e)
 {
 	t_vec3	up;
 
+	if (!e->cam)
+		error_handler("Camera configuration not provided\n", e);	
 	up = init_vec3(0, 0, 0);
 	calculate_viewport_size(e);
 	init_camera_orthogonal_vectors(e, &up);

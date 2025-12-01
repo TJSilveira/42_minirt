@@ -31,7 +31,7 @@
 # define MAX_INT_COLOR 255
 # define TMAX 5000
 # define RAY_SAMPLE_SIDE_SIZE 2.0
-# define RAY_SAMPLE_PADDING 0.1
+# define RAY_SAMPLE_PADDING 0.2 
 # define EPSILON 0.000001
 
 # define PI 3.14159265
@@ -221,8 +221,8 @@ t_vec3			unit_vec3(t_vec3 *v);
 float			vec3_dot(t_vec3 *v1, t_vec3 *v2);
 void			error_handler(char *msg, t_engine *e);
 
-float			length_squared(t_vec3 *v);
-float			length(t_vec3 *v);
+float			vec3_length_squared(t_vec3 *v);
+float			vec3_length(t_vec3 *v);
 
 t_vec3			vec3_mul_const_copy(t_vec3 v, float t);
 void			vec3_mul_const(t_vec3 *v, float t);
