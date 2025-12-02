@@ -30,8 +30,8 @@
 # endif
 # define MAX_INT_COLOR 255
 # define TMAX 5000
-# define RAY_SAMPLE_SIDE_SIZE 2.0
-# define RAY_SAMPLE_PADDING 0.2 
+# define RAY_SAMPLE_SIDE_SIZE 3.0
+# define RAY_SAMPLE_PADDING 0.1
 # define EPSILON 0.000001
 
 # define PI 3.14159265

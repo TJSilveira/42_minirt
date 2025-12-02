@@ -204,7 +204,7 @@ int rt_import_vec3_normalized (char *param, t_vec3 *vec)
 	i = -1;
 	while (nums[++i])
 		ft_str_to_float(nums[i], &vec->e[i]);
-	if (vec3_length(vec) - 1 < EPSILON)
+	if (fabs(vec3_length(vec) - 1.0f) < EPSILON)
 		return(return_and_free_array(EXIT_SUCCESS, nums));
 	return(return_and_free_array(EXIT_FAILURE, nums));	
 }

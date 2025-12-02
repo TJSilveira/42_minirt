@@ -49,11 +49,9 @@ t_color3	ray_tracer(t_ray *r, t_engine *e)
 	t_color3 black; 
 
 	hit = (t_hit){0};
-	black = (t_color3){{1.0,1.0,1.0}};
+	black = (t_color3){{0.0,0.0,0.0}};
 	if (hit_object(e,r,&hit) == TRUE)
-	{
 		return (ray_color(r, e, &hit));
-	}
 	return (black);
 }
 
@@ -118,6 +116,7 @@ t_color3	ray_color_specular_light(t_light *l, t_hit *hit, t_ray *r)
 {
 	t_ray		reflected_ray;
 	t_ray		light_ray;
+	t_vec3		view_dir;
 	t_color3	specular_color;
 	float		intensity;
 	float		n_dot_l;
@@ -130,7 +129,8 @@ t_color3	ray_color_specular_light(t_light *l, t_hit *hit, t_ray *r)
 	vec3_sub_2inst(&reflected_ray.dir, &light_ray.dir);
 	reflected_ray.dir = unit_vec3(&reflected_ray.dir);
 	vec3_mul_const(&reflected_ray.dir, -1.0);
-	intensity = vec3_dot(&reflected_ray.dir, &r->dir);
+	view_dir = unit_vec3(&r->dir);
+	intensity = vec3_dot(&reflected_ray.dir, &view_dir);
 	if (intensity < 0)
 		return ((t_color3){{0,0,0}});
 	intensity = pow(fmax(0.0, intensity), SPECULAR_PARAM);
@@ -147,7 +147,8 @@ void set_face_normal(t_ray *r, t_hit *hit)
 		hit->inside_face = TRUE;
 		vec3_mul_const(&hit->normal, -1.0);
 	}
-	hit->inside_face = FALSE;
+	else
+		hit->inside_face = FALSE;
 }
 
 t_bool	hit_sphere(t_sphere *s, t_ray *r, t_hit *hit)
@@ -195,6 +196,8 @@ t_bool	hit_plane (t_plane *p, t_ray *r, t_hit *hit)
 	if (t <= r->itv.min || t >= r->itv.max)
 		return (FALSE);
 	record_hit(r, hit, &p->normal, t);
+	if (vec3_dot(&hit->normal, &r->dir) > 0)
+		vec3_mul_const(&hit->normal, -1.0);
 	hit->color = p->color;
 	return (TRUE);
 }
