@@ -68,16 +68,9 @@ t_color3	ray_color(t_ray *r, t_engine *e, t_hit *hit)
 	{
 		if (in_shadow(e, e->scene.lights[i], hit) == FALSE)
 		{
-			// printf("Ambient\n");
-			// print_vec3(&phong_color);
 			diffuse_color = ray_color_diffuse_light(e->scene.lights[i], hit);
-			// printf("Diffuse\n");
-			// print_vec3(&diffuse_color);
 			vec3_add_2inst(&phong_color, &diffuse_color);
 			specular_color = ray_color_specular_light(e->scene.lights[i], hit, r);
-			// specular_color = (t_color3){{0}};
-			// printf("Specular\n");
-			// print_vec3(&specular_color);
 			vec3_add_2inst(&phong_color, &specular_color);
 		}
 	}

@@ -60,14 +60,8 @@ void	move_rotation(t_engine *e, float side_rot, float front_rot)
 	new_focal_point = vec3_add_2inst_copy(e->cam->camera_center, e->cam->vec_focal);
 	side_tilt = vec3_mul_const_copy(e->cam->vec_right, side_rot);
 	front_tilt = vec3_mul_const_copy(e->cam->vec_down, -front_rot);
-
-	printf("This is front tilt\n");
-	print_vec3(&front_tilt);
-	printf("This is Camera Center\n");
-	print_vec3(&new_focal_point);
 	vec3_add_2inst(&new_focal_point, &side_tilt);
 	vec3_add_2inst(&new_focal_point, &front_tilt);
-
 	new_dir = vec3_sub_2inst_copy(new_focal_point, e->cam->camera_center);
 	new_dir = unit_vec3(&new_dir);
 	e->cam->direction = new_dir;
