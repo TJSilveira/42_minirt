@@ -87,6 +87,6 @@ valgrind: re
 	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./bin/minirt test1.rt
 
 run: re
-	@./bin/minirt test1.rt
+	@./bin/minirt ./scenes/test2.rt
 
 .PHONY: all clean fclean re
