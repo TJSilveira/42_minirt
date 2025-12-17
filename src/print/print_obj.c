@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print.c                                            :+:      :+:    :+:   */
+/*   print_obj.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:36 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:52:37 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:56:20 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	print_scene_objects(t_engine *e)
 	{
 		print_scene_sphere(e->scene.objects[i]);
 		print_scene_plane(e->scene.objects[i]);
+		print_scene_cylinder(e->scene.objects[i]);
 	}
 }
 
@@ -86,6 +87,23 @@ void	print_scene_plane(t_object *obj)
 		print_vec3(&obj->obj_union.plane.normal);
 		printf("Point:\n");
 		print_vec3(&obj->obj_union.plane.point);
+		printf("\n");
+	}
+}
+
+void	print_scene_cylinder(t_object *obj) //added
+{
+	if (obj->id == id_cylinder)
+	{
+		printf("[CYLINDER]\n");
+		printf("Color:\n");
+		print_vec3(&obj->obj_union.cylinder.color);
+		printf("Center:\n");
+		print_vec3(&obj->obj_union.cylinder.center);
+		printf("Normal/Axis:\n");
+		print_vec3(&obj->obj_union.cylinder.normal);
+		printf("Diameter: %f\n", obj->obj_union.cylinder.diam);
+		printf("Height: %f\n", obj->obj_union.cylinder.h);
 		printf("\n");
 	}
 }

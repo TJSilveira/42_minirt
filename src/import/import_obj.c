@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   import.c                                           :+:      :+:    :+:   */
+/*   import_obj.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:51:19 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:51:22 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/16 15:28:06 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,5 +130,34 @@ int	rt_import_camera(char **params, t_engine *e)
 			&e->cam->direction) == EXIT_FAILURE || rt_import_fov(params[2],
 			&e->cam->fov) == EXIT_FAILURE)
 		error_handler("Camera inputs not provided correctly\n", e);
+	return (EXIT_SUCCESS);
+}
+
+int rt_import_cylinder(char **params, t_engine *e) //added cylinder
+{
+	int			i;
+	t_object	*cy;
+
+	cy = malloc(sizeof(t_object));
+	if (!cy)
+		error_handler("Malloc was not successful.\n", e);
+	i = 0;
+	while (params[i])
+		i++;
+	if (i != NUM_PARAM_CYLINDER)
+		return (EXIT_FAILURE);
+	if (rt_import_vec3(params[0], &cy->obj_union.cylinder.center) == EXIT_FAILURE // Center
+		|| rt_import_vec3_normalized(params[1],
+			&cy->obj_union.cylinder.normal) == EXIT_FAILURE // Axis/Normal
+		|| rt_import_float_non_negative(params[2],
+			&cy->obj_union.cylinder.diam) == EXIT_FAILURE // Diameter
+		|| rt_import_float_non_negative(params[3],
+			&cy->obj_union.cylinder.h) == EXIT_FAILURE // Height
+		|| rt_import_color(params[4],
+			&cy->obj_union.cylinder.color) == EXIT_FAILURE) // Color
+		return (free(cy), EXIT_FAILURE);
+	cy->id = id_cylinder;
+	cy->obj_union.cylinder.normal = unit_vec3(&cy->obj_union.cylinder.normal);
+	add_object_to_scene(e, cy);
 	return (EXIT_SUCCESS);
 }

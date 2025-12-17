@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:18 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:52:22 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/16 18:41:00 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,3 +37,4 @@ float	degrees_to_radians(float degrees)
 {
 	return (degrees * PI / 180.0);
 }
+
