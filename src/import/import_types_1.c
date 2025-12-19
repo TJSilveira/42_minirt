@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   import_types.c                                     :+:      :+:    :+:   */
+/*   import_types_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:51:19 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/17 11:55:37 by amoiseik         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:35:19 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,26 +33,6 @@ int	rt_import_color(char *param, t_vec3 *vec)
 		ft_str_to_float(nums[i], &vec->e[i]);
 	vec3_div_const(vec, MAX_INT_COLOR);
 	return (return_and_free_array(EXIT_SUCCESS, nums));
-}
-
-int	rt_import_float_non_negative(char *param, float *result)
-{
-	if (is_float(param) == FALSE)
-		return (EXIT_FAILURE);
-	ft_str_to_float(param, result);
-	if (*result <= 0)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
-}
-
-int	rt_import_float_between_01(char *param, float *result)
-{
-	if (is_float(param) == FALSE)
-		return (EXIT_FAILURE);
-	ft_str_to_float(param, result);
-	if (*result < 0 || *result > 1)
-		return (EXIT_FAILURE);
-	return (EXIT_SUCCESS);
 }
 
 int	rt_import_fov(char *param, float *result)
@@ -102,17 +82,8 @@ int	rt_import_vec3_normalized(char *param, t_vec3 *vec)
 	i = -1;
 	while (nums[++i])
 		ft_str_to_float(nums[i], &vec->e[i]);
-
-	// Проверка: Нельзя нормализовать нулевой вектор (0, 0, 0)
 	if (vec3_length(vec) < EPSILON) 
 		return (return_and_free_array(EXIT_FAILURE, nums));
-
-	// *** ИСПРАВЛЕНИЕ: Нормализуем вектор, а не просто проверяем его длину ***
-	*vec = unit_vec3(vec); // Предполагаем, что unit_vec3(t_vec3 v) возвращает нормализованную копию
-
+	*vec = unit_vec3(vec);
 	return (return_and_free_array(EXIT_SUCCESS, nums));
-	
-	// if (fabs(vec3_length(vec) - 1.0f) < EPSILON)
-	// 	return (return_and_free_array(EXIT_SUCCESS, nums));
-	// return (return_and_free_array(EXIT_FAILURE, nums));
 }
