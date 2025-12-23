@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   import.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:51:19 by tsilveir          #+#    #+#             */
 /*   Updated: 2025/12/19 15:37:13 by amoiseik         ###   ########.fr       */
@@ -12,7 +12,6 @@
 
 #include "../includes/minirt.h"
 
-//added last "if" for cylinder
 int	rt_importer_params(char **params, t_engine *e)
 {
 	if (ft_strncmp(params[0], "sp", 2) == 0 && ft_strlen(params[0]) == 2)

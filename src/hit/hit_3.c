@@ -12,8 +12,6 @@
 
 #include "minirt.h"
 
-//added hole new file
-
 static t_bool	check_height_limit(t_cylinder *c, t_ray *r, float t)
 {
 	t_vec3	hit_point;
@@ -59,10 +57,10 @@ static t_bool	hit_cylinder_side(t_cylinder *c, t_ray *r, t_hit *hit)
 	q.c = vec3_dot(&oc_perp, &oc_perp) - (c->diam * 0.5f) * (c->diam * 0.5f);
 	if (cy_solve_quadratic(&q, &t[0], &t[1]) == 0)
 		return (FALSE);
-	if (t[0] > r->itv.min && t[0] < r->itv.max 
+	if (t[0] > r->itv.min && t[0] < r->itv.max
 		&& check_height_limit(c, r, t[0]))
 		return (fill_side_hit(c, r, hit, t[0]), TRUE);
-	if (t[1] > r->itv.min && t[1] < r->itv.max 
+	if (t[1] > r->itv.min && t[1] < r->itv.max
 		&& check_height_limit(c, r, t[1]))
 		return (fill_side_hit(c, r, hit, t[1]), TRUE);
 	return (FALSE);
@@ -102,6 +100,7 @@ t_bool	hit_cylinder(t_cylinder *c, t_ray *r, t_hit *hit)
 	t_hit	temp_hit;
 
 	is_hit = FALSE;
+	temp_hit = (t_hit){0};
 	if (hit_cylinder_side(c, r, &temp_hit))
 	{
 		*hit = temp_hit;

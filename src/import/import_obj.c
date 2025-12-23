@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   import_obj.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:51:19 by tsilveir          #+#    #+#             */
 /*   Updated: 2025/12/19 15:26:07 by amoiseik         ###   ########.fr       */
@@ -89,7 +89,6 @@ int	rt_import_camera(char **params, t_engine *e)
 	return (EXIT_SUCCESS);
 }
 
-//added cylinder
 int	rt_import_cylinder(char **params, t_engine *e)
 {
 	int			i;

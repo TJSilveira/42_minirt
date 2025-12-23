@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:18 by tsilveir          #+#    #+#             */
 /*   Updated: 2025/12/19 14:28:14 by amoiseik         ###   ########.fr       */

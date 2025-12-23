@@ -12,8 +12,6 @@
 
 #include "../includes/minirt.h"
 
-//added new file for lights and ambient import
-
 int	rt_import_light(char **params, t_engine *e)
 {
 	int		i;

@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   hit_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
+/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:42 by tsilveir          #+#    #+#             */
 /*   Updated: 2025/12/19 14:43:47 by amoiseik         ###   ########.fr       */
