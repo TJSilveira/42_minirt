@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 18:16:39 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/08/18 18:16:40 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:28:31 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@
 
 # define NUM_PARAM_SPHERE 3
 # define NUM_PARAM_PLANE 3
+# define NUM_PARAM_CYLINDER 5 //added cylinder
 # define NUM_PARAM_LIGHT 3
 # define NUM_PARAM_AMBIENT 2
 # define NUM_PARAM_CAMERA 3
@@ -231,6 +232,15 @@ typedef struct s_quadartic
 	float				t_plus;
 }						t_quadratic;
 
+//added for calculating intersection with cylinder
+typedef struct s_quad
+{
+	float	a;
+	float	b;
+	float	c;
+	float	disc;
+}	t_quad;
+
 // vec3_utils.c function prototypes
 void					print_vec3(t_vec3 *v);
 t_vec3					init_vec3(float x, float y, float z);
@@ -304,6 +314,7 @@ void					print_scene_lights(t_engine *e);
 void					print_scene_objects(t_engine *e);
 void					print_scene_sphere(t_object *obj);
 void					print_scene_plane(t_object *obj);
+void					print_scene_cylinder(t_object *obj);//added
 t_vec3					vec3_cross(t_vec3 *v1, t_vec3 *v2);
 void					cleanup_engine(t_engine *e);
 void					cleanup_scene(t_engine *e);
@@ -313,6 +324,8 @@ void					show_help(void);
 // math_utils.c
 t_quadratic				solve_quadratic(t_sphere *s, t_ray *r);
 float					degrees_to_radians(float degrees);
+//added
+int						cy_solve_quadratic(t_quad *q, float *t1, float *t2);
 
 // scene.c
 void					import_rt_file_definitions(char *argv[], t_engine *e);
@@ -326,8 +339,10 @@ int						rt_import_plane(char **params, t_engine *e);
 int						rt_import_light(char **params, t_engine *e);
 int						rt_import_ambient(char **params, t_engine *e);
 int						rt_import_camera(char **params, t_engine *e);
+int						rt_import_cylinder(char **params, t_engine *e); //added
 int						rt_import_color(char *param, t_vec3 *vec);
-int						rt_import_float_non_negative(char *param, float *result);
+int						rt_import_float_non_negative(char *param,
+							float *result);
 int						rt_import_float_between_01(char *param, float *result);
 int						rt_import_vec3(char *param, t_vec3 *vec);
 int						rt_importer_params(char **params, t_engine *e);
@@ -363,5 +378,8 @@ t_bool					hit_plane(t_plane *p, t_ray *r, t_hit *hit);
 
 // hit_2.c
 void					set_face_normal(t_ray *r, t_hit *hit);
+
+// hit_3.c added
+t_bool					hit_cylinder(t_cylinder *c, t_ray *r, t_hit *hit);
 
 #endif

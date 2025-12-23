@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   math_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:18 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:52:22 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/19 14:28:14 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,24 @@ t_quadratic	solve_quadratic(t_sphere *s, t_ray *r)
 float	degrees_to_radians(float degrees)
 {
 	return (degrees * PI / 180.0);
+}
+
+//added
+int	cy_solve_quadratic(t_quad *q, float *t1, float *t2)
+{
+	float	sqrt_disc;
+
+	q->disc = q->b * q->b - 4.0f * q->a * q->c;
+	if (q->disc < 0)
+		return (0);
+	if (q->disc < EPSILON)
+	{
+		*t1 = -q->b / (2.0f * q->a);
+		*t2 = *t1;
+		return (1);
+	}
+	sqrt_disc = sqrtf(q->disc);
+	*t1 = (-q->b - sqrt_disc) / (2.0f * q->a);
+	*t2 = (-q->b + sqrt_disc) / (2.0f * q->a);
+	return (2);
 }

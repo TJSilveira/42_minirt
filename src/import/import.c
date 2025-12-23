@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   import.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:51:19 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:51:22 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/19 15:37:13 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
+//added last "if" for cylinder
 int	rt_importer_params(char **params, t_engine *e)
 {
 	if (ft_strncmp(params[0], "sp", 2) == 0 && ft_strlen(params[0]) == 2)
@@ -24,6 +25,8 @@ int	rt_importer_params(char **params, t_engine *e)
 		return (rt_import_ambient(&params[1], e));
 	if (ft_strncmp(params[0], "C", 1) == 0 && ft_strlen(params[0]) == 1)
 		return (rt_import_camera(&params[1], e));
+	if (ft_strncmp(params[0], "cy", 2) == 0 && ft_strlen(params[0]) == 2)
+		return (rt_import_cylinder(&params[1], e));
 	free_arrays(params);
 	return (EXIT_FAILURE);
 }

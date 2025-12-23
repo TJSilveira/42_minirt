@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ray.c                                              :+:      :+:    :+:   */
+/*   hit_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsilveir <tsilveir@student.42luxembourg.l  +#+  +:+       +#+        */
+/*   By: amoiseik <amoiseik@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 14:52:42 by tsilveir          #+#    #+#             */
-/*   Updated: 2025/12/02 14:52:44 by tsilveir         ###   ########.fr       */
+/*   Updated: 2025/12/19 14:43:47 by amoiseik         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,15 @@ t_bool	hit_object(t_engine *e, t_ray *r, t_hit *hit)
 	return (hit_anything);
 }
 
+// added last if for cylinder
 t_bool	hit_object_function_selecter(t_object *obj, t_ray *r, t_hit *hit)
 {
 	if (obj->id == id_sphere)
 		return (hit_sphere(&obj->obj_union.sphere, r, hit));
 	else if (obj->id == id_plane)
 		return (hit_plane(&obj->obj_union.plane, r, hit));
+	else if (obj->id == id_cylinder)
+		return (hit_cylinder(&obj->obj_union.cylinder, r, hit));
 	return (FALSE);
 }
 
