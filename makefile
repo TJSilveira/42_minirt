@@ -113,10 +113,12 @@ re: fclean ${NAME}
 test: re
 	@./minirt
 
+bonus: all
+
 rebonus: fclean bonus
 
 valgrind: re
-	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./bin/minirt test1.rt
+	@valgrind --leak-check=full --track-fds=yes -s --show-leak-kinds=all --track-origins=yes ./bin/minirt ./scenes/test1.rt
 
 run: re
 	@./bin/minirt ./scenes/test2.rt
