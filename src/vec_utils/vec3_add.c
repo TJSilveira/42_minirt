@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 t_vec3	vec3_add_2inst_copy(t_vec3 v1, t_vec3 v2)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 t_color3	ray_color(t_ray *r, t_engine *e, t_hit *hit)
 {

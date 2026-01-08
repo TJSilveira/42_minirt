@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 //added new file for printing lights and ambient. Devided print_scene_elements.c
 void	print_scene_ambient(t_engine *e)

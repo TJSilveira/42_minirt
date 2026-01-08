@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 void	add_object_to_scene(t_engine *e, t_object *obj)
 {
@@ -43,6 +43,16 @@ void	init_scene(t_engine *e)
 	e->scene.amb = NULL;
 }
 
+int	open_and_check_file(char *argv[], t_engine *e)
+{
+	int	fd;
+
+	fd = open(argv[1], O_RDONLY);
+	if (fd == -1)
+		error_handler("Problem opening file\n", e);
+	return (fd);
+}
+
 void	import_rt_file_definitions(char *argv[], t_engine *e)
 {
 	int		fd;
@@ -50,7 +60,7 @@ void	import_rt_file_definitions(char *argv[], t_engine *e)
 	char	**params;
 
 	init_scene(e);
-	fd = open(argv[1], O_RDONLY);
+	fd = open_and_check_file(argv, e);
 	buffer = get_next_line(fd, TO_USE);
 	while (buffer)
 	{

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 /*	The point that corresponds to the top left of the screen upon which
 	all the calculations on pixel location will depend on */

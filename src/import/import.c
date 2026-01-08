@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 int	rt_importer_params(char **params, t_engine *e)
 {
@@ -51,7 +51,7 @@ void	rt_extension_check(char *argv[])
 	ext = ft_strrchr(argv[1], '.');
 	if (!ext || ft_strncmp(ext, ".rt", 3) != 0)
 	{
-		ft_putstr_fd("The file used is not a .rt file\n",
+		ft_putstr_fd("Error\nThe file used is not a .rt file\n",
 			STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}

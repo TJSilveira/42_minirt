@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minirt.h"
+#include "../../includes/minirt.h"
 
 static t_bool	check_height_limit(t_cylinder *c, t_ray *r, float t)
 {

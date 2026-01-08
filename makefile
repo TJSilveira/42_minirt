@@ -23,7 +23,39 @@ MLX_DIR		= ./minilibx-linux/
 BIN_DIR		= ./bin/
 
 # Source Files
-SRC         =   $(shell find src/ -name '*.c')
+SRC_FILES	=   main.c \
+				camera/camera.c \
+				camera/camera_init.c \
+				hit/hit_1.c \
+				hit/hit_2.c \
+				hit/hit_3.c \
+				import/import.c \
+				import/import_lights.c \
+				import/import_obj.c \
+				import/import_types_1.c \
+				import/import_types_2.c \
+				print/print.c \
+				print/print_lights.c \
+				print/print_obj.c \
+				raytracer/colors.c \
+				raytracer/light.c \
+				raytracer/raytracer.c \
+				raytracer/raytracer_color.c \
+				render/render.c \
+				render/scene.c \
+				utils/cleanup.c \
+				utils/error_free_functions.c \
+				utils/events.c \
+				utils/help.c \
+				utils/math_utils.c \
+				utils/utils_type.c \
+				vec_utils/vec3_add.c \
+				vec_utils/vec3_div_sub.c \
+				vec_utils/vec3_length.c \
+				vec_utils/vec3_mul.c \
+				vec_utils/vec3_utils.c
+
+SRC = 	$(addprefix $(SRC_DIR), $(SRC_FILES))
 
 # Object Files
 OBJS        =   $(patsubst src/%.c,objs/%.o,$(SRC))

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 void	get_pixel_color_anti_alaising_rt(t_engine *e, t_pixel *p)
 {

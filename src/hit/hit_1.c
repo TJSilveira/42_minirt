@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minirt.h"
+#include "../../includes/minirt.h"
 
 t_bool	hit_object(t_engine *e, t_ray *r, t_hit *hit)
 {
